@@ -140,11 +140,13 @@ I then recorded the vehicle recovering from the left side and right sides of the
 Also, a large amount of data are collected for clockwise and counter-clockwise smooth curve driving so the trained model can tell vehicle how to drive through curves smoothly along the track. Example images for curve driving are shown here:
 
 Left turn counter-clockwise curve driving:
+
 ![alt text][image9]
 ![alt text][image10]
 ![alt text][image11]
 
 Right turn clockwise curve driving:
+
 ![alt text][image12]
 ![alt text][image13]
 ![alt text][image14]
@@ -160,7 +162,7 @@ Also, I have utilized multiple camera images to mimic off-center driving data in
 
 The codes for using multiple camera images are shown in model.py lines 37-45. The principle is for a left turn, a softer left turn is needed for left camera image, while a harder left turn is needed for right camera image. The steering angle correction parameters for left and right images can be set to tunable if needed.
 
-After the collection process, I had X number of data points. I then preprocessed this data by using generators
+After the collection process, I had 6947x6 = 41682 number of data points (6947 is the original number of data points, 6 times is due to 3 times of 3 cameras and 2 times of flipping data augmentation). I then preprocessed this data by using generators
 
 I finally randomly shuffled the data set and put 20% of the data into a validation set. 
 
