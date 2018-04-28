@@ -81,27 +81,41 @@ The large amounts of training dataset contains these driving scenarios:
 
 #### 1. Solution Design Approach
 
-The overall strategy for deriving a model architecture was to ...
+The overall strategy for deriving a model architecture was to start from simple network and then improve the network with more appropriate and complicate layers by trial and testing in simulator step by step.
 
-My first step was to use a convolution neural network model similar to the ... I thought this model might be appropriate because ...
+My first step was to try a flatten layer connected with a single output node to see whether the model will drive the car autonomously. The single output node will predict the steering angle, which makes the network a regression type one.
 
-In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had a low mean squared error on the training set but a high mean squared error on the validation set. This implied that the model was overfitting. 
+In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had very high mean squared error on both training and validation dataset. This is mainly due to the simple regression network.
 
-To combat the overfitting, I modified the model so that ...
+Then I tried a more powerful LeNet since I am familiar with it in previous class and it has convolutional layers. I adapt the input size and also output size since we only need one input instead of classification on 10 outputs. Both the mean squared errors on training and validation dataset reduced a lot. However after testing the model output in simulator, it turns out the car can drive autonmously straight ahead but not following the track very well. I think the main reason is that LeNet is designed for classification with several outputs instead of one single continuous output like the steering angle output in our case.
 
-Then I ... 
+Lastly, as suggested in the class, I tried even more powerful network published by the autonomous team in Nvidia. This network contains more convolutional layers and fully connected layers and seems to be specifically designed for one single steering angle output. 
 
-The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track... to improve the driving behavior in these cases, I ....
+With this Nvidia network, I trained with my one lap of center-lane driving data and test the model output in simulator. It turns out I got both even lower mean squared errors in training and validation datasets. However, it seems mean squared error of training dataset is higher than that of validation dataset. This means overfitting. And the test result in simulator shows that vehicle can drive straight well following the track. However, when it encounters corner, it cannot turn quickly and enough to go through the corner, instead it keeps driving straight and eventually go offroad out of the track. 
 
-At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
+As suggested in the class, if the model is overfitting, several tactics can be used to deal with that. I tried collecting more data and further augmenting the data instead of using dropout and using fewer convolution or fully connected layers. The reason is I don't want to loose critical and low probability data with large steering during dropout or using less convolution layers for driving through corners autonomously. So I tried collecting some additonal data including drving in opposite direction, smooth corner driving in both directions, and some recovery driving from off road back to track. Also I have applied data augentation method like flipping images and steering measurements, and using additional data from left and right cameras.
+
+Eventually with more useful data collected, the trained model output can used to drive the vehicle autonomously in simulator and following the track pretty well!
 
 #### 2. Final Model Architecture
 
-The final model architecture (model.py lines 18-24) consisted of a convolution neural network with the following layers and layer sizes ...
+The final model architecture (model.py lines 76-86) is shown below:
 
-Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
-
-![alt text][image1]
+| Layer         		|     Description	        					| 
+|:---------------------:|:---------------------------------------------:| 
+| Input         		| 160x320x3 RGB image   							| 
+| Layer1: Data Normalization     	| Keras lambda normalization, outputs 160x320x3 	|
+| Layer2: Image Cropping	    | Crops off useless top and bottom parts of original image  |
+| Layer3: Convolution 5x5	| 2x2 stride, output depth 24, activation "Relu" |
+| Layer4: Convolution 5x5	| 2x2 stride, output depth 36, activation "Relu" |
+| Layer5: Convolution 5x5	| 2x2 stride, output depth 48, activation "Relu" |
+| Layer6: Convolution 5x5	| 1x1 stride, output depth 64, activation "Relu" |
+| Layer7: Convolution 5x5	| 1x1 stride, output depth 64, activation "Relu" |
+| Layer8: Flatten	| Flatten images for fully connected layers |
+| Layer9: Fully connected		| outputs 100        									|
+|	Layer10: Fully Connected		|				input 100, output 50								|
+|	Layer11: Fully Connected		|				input 50, output 10								|
+|	Layer12: Fully Connected		|				input 10, output 1								|
 
 #### 3. Creation of the Training Set & Training Process
 
