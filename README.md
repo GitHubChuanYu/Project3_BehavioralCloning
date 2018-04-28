@@ -94,7 +94,7 @@ My first step was to try a flatten layer connected with a single output node to 
 
 In order to gauge how well the model was working, I split my image and steering angle data into a training and validation set. I found that my first model had very high mean squared error on both training and validation dataset. This is mainly due to the simple regression network.
 
-Then I tried a more powerful LeNet since I am familiar with it in previous class and it has convolutional layers. I adapt the input size and also output size since we only need one input instead of classification on 10 outputs. Both the mean squared errors on training and validation dataset reduced a lot. However after testing the model output in simulator, it turns out the car can drive autonmously straight ahead but not following the track very well. I think the main reason is that LeNet is designed for classification with several outputs instead of one single continuous output like the steering angle output in our case.
+Then I tried a more powerful LeNet since I am familiar with it in previous class and it has convolutional layers. I adapt the input size and also output size since we only need one output instead of classification on 10 outputs. Both the mean squared errors on training and validation dataset reduced a lot. However after testing the model output in simulator, it turns out the car can drive autonmously straight ahead but not following the track very well in turning. I think the main reason is that LeNet is designed for classification with several outputs instead of one single continuous output like the steering angle output in our case.
 
 Lastly, as suggested in the class, I tried even more powerful network published by the autonomous team in Nvidia. This network contains more convolutional layers and fully connected layers and seems to be specifically designed for one single steering angle output. 
 
@@ -102,7 +102,7 @@ With this Nvidia network, I trained with my one lap of center-lane driving data 
 
 As suggested in the class, if the model is overfitting, several tactics can be used to deal with that. I tried collecting more data and further augmenting the data instead of using dropout and using fewer convolution or fully connected layers. The reason is I don't want to loose critical and low probability data with large steering during dropout or using less convolution layers for driving through corners autonomously. So I tried collecting some additonal data including drving in opposite direction, smooth corner driving in both directions, and some recovery driving from off road back to track. Also I have applied data augentation method like flipping images and steering measurements, and using additional data from left and right cameras.
 
-Eventually with more useful data collected, the trained model output can used to drive the vehicle autonomously in simulator and following the track pretty well!
+Eventually with more useful data collected, the trained model output can be used to drive the vehicle autonomously in simulator and following the track pretty well!
 
 #### 2. Final Model Architecture
 
