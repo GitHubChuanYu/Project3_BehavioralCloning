@@ -18,13 +18,20 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/placeholder.png "Model Visualization"
-[image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
-[image7]: ./examples/placeholder_small.png "Flipped Image"
+[image1]: ./exampleimages/Center.jpg "CenterLaneDriving"
+[image2]: ./exampleimages/Recover1.jpg "RecoverDriving1"
+[image3]: ./exampleimages/Recover2.jpg "RecoverDriving2"
+[image4]: ./exampleimages/Recover3.jpg "RecoverDriving3"
+[image5]: ./exampleimages/Recover4.jpg "RecoverDriving4"
+[image6]: ./exampleimages/Flip1.jpg "Original Image"
+[image7]: ./exampleimages/Flip2.jpg "Flipped Image"
+[image8]: ./exampleimages/MultipleCameras.png "MultipleCameras"
+[image9]: ./exampleimages/Corner1.jpg "Corner1"
+[image10]: ./exampleimages/Corner2.jpg "Corner2"
+[image11]: ./exampleimages/Corner3.jpg "Corner3"
+[image12]: ./exampleimages/Corner4.jpg "Corner4"
+[image13]: ./exampleimages/Corner5.jpg "Corner5"
+[image14]: ./exampleimages/Corner6.jpg "Corner6"
 
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
@@ -121,26 +128,40 @@ The final model architecture (model.py lines 76-86) is shown below:
 
 To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
 
+![alt text][image1]
+
+I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to drive through the corner smoothly. These images show what a recovery looks like:
+
 ![alt text][image2]
-
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
-
 ![alt text][image3]
 ![alt text][image4]
 ![alt text][image5]
 
-Then I repeated this process on track two in order to get more data points.
+Also, a large amount of data are collected for clockwise and counter-clockwise smooth curve driving so the trained model can tell vehicle how to drive through curves smoothly along the track. Example images for curve driving are shown here:
 
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
+Left turn counter-clockwise curve driving:
+![alt text][image9]
+![alt text][image10]
+![alt text][image11]
+
+Right turn clockwise curve driving:
+![alt text][image12]
+![alt text][image13]
+![alt text][image14]
+
+To augment the data sat, I also flipped images and angles thinking that this would overcome the left turn bias of the data training track also add more different training data in different scenarios. For example, here is an image that has then been flipped:
 
 ![alt text][image6]
 ![alt text][image7]
 
-Etc ....
+Also, I have utilized multiple camera images to mimic off-center driving data in real world. This will also help to train the vehicle to learn how to deal with off-center driving properply. This principle of using multiple camera images is demonstrated in this image:
 
-After the collection process, I had X number of data points. I then preprocessed this data by ...
+![alt text][image8]
 
+The codes for using multiple camera images are shown in model.py lines 37-45. The principle is for a left turn, a softer left turn is needed for left camera image, while a harder left turn is needed for right camera image. The steering angle correction parameters for left and right images can be set to tunable if needed.
 
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
+After the collection process, I had X number of data points. I then preprocessed this data by using generators
 
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+I finally randomly shuffled the data set and put 20% of the data into a validation set. 
+
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 3 as evidenced by checking the mean squared error for validation set starts to increase in epoch 4. I used an adam optimizer so that manually training the learning rate wasn't necessary. Finally the simulator test showed the vehicle can drive autonomously and smoothly through the track without any off-track problems, the result is shown in video.mp4.
