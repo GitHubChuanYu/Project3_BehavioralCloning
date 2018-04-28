@@ -1,8 +1,8 @@
 # **Behavioral Cloning** 
 
-## Writeup Template
+## Writeup Report
 
-### You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
+### This is Chuan's writeup report for Udacity self-driving car nano degree program term 1 project 3 - behavioral cloning.
 
 ---
 
@@ -38,7 +38,7 @@ My project includes the following files:
 * model.py containing the script to create and train the model
 * drive.py for driving the car in autonomous mode
 * model.h5 containing a trained convolution neural network 
-* writeup_report.md or writeup_report.pdf summarizing the results
+* README.md summarizing the results
 
 #### 2. Submission includes functional code
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
@@ -54,25 +54,28 @@ The model.py file contains the code for training and saving the convolution neur
 
 #### 1. An appropriate model architecture has been employed
 
-My model consists of a convolution neural network with 3x3 filter sizes and depths between 32 and 128 (model.py lines 18-24) 
+My model is based on powerful neural network architecture published by autonomous vehicle team in Nvidia. It contains five convolutional layers and 3 fully connected layers.  (model.py lines 76-86) 
 
-The model includes RELU layers to introduce nonlinearity (code line 20), and the data is normalized in the model using a Keras lambda layer (code line 18). 
+The model includes RELU layers which are embedded in keras convolution layer to introduce nonlinearity (model.py lines 76-80), and the data is normalized in the model using a Keras lambda layer (model.py lines 72). 
 
 #### 2. Attempts to reduce overfitting in the model
 
-The model contains dropout layers in order to reduce overfitting (model.py lines 21). 
+In my model, I did not use dropout layer to reduce overfitting due to the reason that dropout may cause the model to lose some important training data with large steering angle. And these large steering angle data do not have high probability in overall training dataset so dropout will easily cause the lost of them. But these pieces of traning dataset with large steering angle are critical for model to predict steering angle for curve driving and turning.
 
-The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 10-16). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+Instead I tried to get large amounts of training data to overcome the overfitting in the model. And it turns out to be very effective with very close training and validation loss. 
+
+The total Train_Data size is about 276MB, so I cannot include it in this respository. 
 
 #### 3. Model parameter tuning
 
-The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 25).
+The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 89).
 
 #### 4. Appropriate training data
 
-Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road ... 
-
-For details about how I created the training data, see the next section. 
+The large amounts of training dataset contains these driving scenarios:
+* Two laps of center lane driving with one clockwise and another counter-clockwise
+* One lap of recovering driving from sides
+* A lot of small data collection for smoothly driving through corners (even with both clockwise and counter-clockwise directions) A lot of fun!
 
 ### Model Architecture and Training Strategy
 
